@@ -37,8 +37,8 @@ export class UserService {
         return this.UserRepository.save(newUser);
     }
 
-    async findOneByEmail (secondaryEmail: string): Promise<User> {
-        return this.UserRepository.findOne({ where: { secondaryEmail } });
+    async findOneByEmail (corporateEmail: string): Promise<User> {
+        return this.UserRepository.findOne({ where: { corporateEmail } });
     }
 
     async saveUser (user: User): Promise<User> {

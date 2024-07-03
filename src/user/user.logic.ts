@@ -90,8 +90,8 @@ export class UserLogic {
     const approveEmailRecipients = process.env.APPROVE_EMAIL_RECIPIENTS.split(',');
     await this.sendApproveEmail(newUser, approveEmailRecipients);
 
-    if (newUser.secondaryEmail) {
-      await this.sendRegistrationEmail(newUser.secondaryEmail, newUser.name);
+    if (newUser.corporateEmail) {
+      await this.sendRegistrationEmail(newUser.corporateEmail, newUser.name);
     }
 
     return newUser;
@@ -141,10 +141,10 @@ export class UserLogic {
     }
   }
 
-  private async sendRegistrationEmail(secondaryEmail: string, name: string) {
+  private async sendRegistrationEmail(corporateEmail: string, name: string) {
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: secondaryEmail,
+      to: corporateEmail,
       subject: 'SOLICITUD DE REGISTRO',
       text: `Hola ${name},\n\nHemos recibido tu registro, en pronto nos comunicaremos contigo.\n`,
     };
@@ -174,7 +174,7 @@ export class UserLogic {
 
     const mailOptions = {
         from: process.env.EMAIL_USER,
-        to: user.secondaryEmail,
+        to: user.corporateEmail,
         subject: 'Registro Aprobado',
         html: `
             <p>Hola ${user.name},</p>
@@ -192,22 +192,22 @@ export class UserLogic {
   }
 
   async emailPassword(emailUserDto: EmailUserDto) { 
-    const email = await this.usersService.findOneByEmail(emailUserDto.secondaryEmail);
+    const email = await this.usersService.findOneByEmail(emailUserDto.corporateEmail);
     if (!email) {
       throw new Error('Usuario no encontrado');
     }
 
-    await this.sendRecoverPasswordMail(email.secondaryEmail, email.name, email.id);
+    await this.sendRecoverPasswordMail(email.corporateEmail, email.name, email.id);
     return email;
   }
 
 
-  private async sendRecoverPasswordMail(secondaryEmail: string, name: string, id: number) {
+  private async sendRecoverPasswordMail(corporateEmail: string, name: string, id: number) {
     const resetPasswordLink = `${this.frontendBaseUrl}/reset-password?userId=${encodeURIComponent(id)}`;
 
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: secondaryEmail,
+      to: corporateEmail,
       subject: 'Recuperación de Contraseña',
       html: `
         <p>Hola, ${name}</p>
