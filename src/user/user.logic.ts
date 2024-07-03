@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException, NotFoundException } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User } from './entities/User.entity';
+import { User } from './entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login-user';
 import { CreateUserDto } from './dto/create-user';
