@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CommonModule } from './common/common.module';
-import { ClientModule } from './client/client.module';
 import { UserModule } from './user/user.module';
 import { PointClientModule } from './point-client/point-client.module'
 import { RedemptionsModule } from './redemptions/redemptions.module'
@@ -23,7 +22,6 @@ import { RedemptionsModule } from './redemptions/redemptions.module'
       synchronize: false,
     }),
     CommonModule,
-    ClientModule,
     UserModule,
     PointClientModule,
     RedemptionsModule

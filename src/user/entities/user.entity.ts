@@ -2,6 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('usersJM')
 export class User {
+
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -43,5 +44,6 @@ export class User {
 
   @Column()
   typeDocument: string;
+  
 }
 
