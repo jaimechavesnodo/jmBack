@@ -98,7 +98,7 @@ export class UserLogic {
   }
 
   private async sendApproveEmail(newUser: User, recipients: string[]) {
-    const approveLink = `${this.baseUrl}/User/approve/${encodeURIComponent(newUser.id)}`;
+    const approveLink = `${this.baseUrl}/User/approveEmail/${encodeURIComponent(newUser.id)}`;
     
     const mailOptions = {
         from: process.env.EMAIL_USER,
@@ -194,7 +194,7 @@ export class UserLogic {
   async emailPassword(emailUserDto: EmailUserDto) { 
     const email = await this.usersService.findOneByEmail(emailUserDto.corporateEmail);
     if (!email) {
-      throw new Error('Usuario no encontrado');
+      throw new Error('Correo de usuario no encontrado');
     }
 
     await this.sendRecoverPasswordMail(email.corporateEmail, email.name, email.id);
