@@ -21,9 +21,15 @@ export class UserController {
       return newUser;
     }
 
+    // @Get('approveEmail/:id')
+    // async approveUser(@Param('id') id: number): Promise<void> {
+    // await this.userLogic.approveUser(id);
+    // }
+
     @Get('approveEmail/:id')
-    async approveUser(@Param('id') id: number): Promise<void> {
-    await this.userLogic.approveUser(id);
+    async approveUser(@Param('id') id: number): Promise<string> {
+      await this.userLogic.approveUser(id);
+      return 'El usuario ha sido aprobado correctamente';
     }
 
     @Post('emailRecoverPassword')
@@ -35,5 +41,11 @@ export class UserController {
     async recoverPassword(@Param('id') id: number, @Body() recoverPasswordDto: RecoverPasswordDto) {
     return this.userLogic.recoverPassword(id, recoverPasswordDto.password);
     }
+
+    @Get('declineUser/:id')
+    async declineUser(@Param('id') id: number) {
+    await this.userLogic.declineUser(id);
+    return { message: 'Solicitud de registro rechazada correctamente' };
+  }
 
 } 

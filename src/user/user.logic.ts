@@ -7,6 +7,7 @@ import { CreateUserDto } from './dto/create-user';
 import { EmailUserDto } from './dto/email-user';
 import * as bcrypt from 'bcrypt';
 import * as nodemailer from 'nodemailer';
+import { getApproveEmailTemplate, getRecoverPasswordEmailTemplate, getApprovalConfirmationEmailTemplate, getSendPasswordConfirmationEmail, getSendDeclineUserEmail } from './herlpers/user.templates';
 require("dotenv").config();
 
 @Injectable()
@@ -90,48 +91,22 @@ export class UserLogic {
     const approveEmailRecipients = process.env.APPROVE_EMAIL_RECIPIENTS.split(',');
     await this.sendApproveEmail(newUser, approveEmailRecipients);
 
-    if (newUser.corporateEmail) {
-      await this.sendRegistrationEmail(newUser.corporateEmail, newUser.name);
-    }
+    // if (newUser.corporateEmail) {
+    //   await this.sendRegistrationEmail(newUser.corporateEmail, newUser.name);
+    // }
 
     return newUser;
   }
 
   private async sendApproveEmail(newUser: User, recipients: string[]) {
-    const approveLink = `${this.baseUrl}/User/approveEmail/${encodeURIComponent(newUser.id)}`;
-    
-    const mailOptions = {
-        from: process.env.EMAIL_USER,
-        to: recipients.join(','),
-        subject: 'SOLICITUD DE REGISTRO',
-        html: `
-            <p>Hola,</p>
-            <p>Datos de registro nuevo:</p>
-            <ul>
-                <li><strong>Nombre:</strong> ${newUser.name}</li>
-                <li><strong>Apellido:</strong> ${newUser.lastName}</li>
-                <li><strong>Identificación:</strong> ${newUser.identification}</li>
-                <li><strong>Tipo de Documento:</strong> ${newUser.typeDocument}</li>
-                <li><strong>Teléfono:</strong> ${newUser.phone}</li>
-                <li><strong>Email Corporativo:</strong> ${newUser.corporateEmail}</li>
-                <li><strong>Email Secundario:</strong> ${newUser.secondaryEmail}</li>
-                <li><strong>Empresa:</strong> ${newUser.company}</li>
-                <li><strong>Fecha de Nacimiento:</strong> ${newUser.birthdayDate}</li>
-                <li><strong>Teléfono Personal:</strong> ${newUser.personalPhone}</li>
-                <li><strong>Rol:</strong> ${newUser.role}</li>
-            </ul>
-            <p>Para aprobar la solicitud presione el botón.</p>
-            <p><a href="${approveLink}" target="_blank" style="
-                display: inline-block;
-                padding: 10px 20px;
-                font-size: 16px;
-                color: #FFFFFF;
-                background-color: #F50002;
-                text-decoration: none;
-                border-radius: 5px;
-            ">Aprobar solicitud</a></p>
-        `,
-    };
+  const htmlContent = getApproveEmailTemplate(newUser, this.baseUrl);
+
+  const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: recipients.join(','),
+      subject: 'Nueva Solicitud de Registro',
+      html: htmlContent,
+  };
   
     try {
         await this.transporter.sendMail(mailOptions);
@@ -141,21 +116,23 @@ export class UserLogic {
     }
   }
 
-  private async sendRegistrationEmail(corporateEmail: string, name: string) {
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: corporateEmail,
-      subject: 'SOLICITUD DE REGISTRO',
-      text: `Hola ${name},\n\nHemos recibido tu registro, en pronto nos comunicaremos contigo.\n`,
-    };
+  // private async sendRegistrationEmail(corporateEmail: string, name: string) {
+  //   const textContent = getRegistrationEmailTemplate(name);
 
-    try {
-      await this.transporter.sendMail(mailOptions);
-      console.log('Correo electrónico de confirmación enviado');
-    } catch (error) {
-      console.error('Error al enviar el correo electrónico de confirmación:', error);
-    }
-  }
+  //       const mailOptions = {
+  //           from: process.env.EMAIL_USER,
+  //           to: corporateEmail,
+  //           subject: 'SOLICITUD DE REGISTRO',
+  //           text: textContent,
+  // };
+
+  //   try {
+  //     await this.transporter.sendMail(mailOptions);
+  //     console.log('Correo electrónico de confirmación enviado');
+  //   } catch (error) {
+  //     console.error('Error al enviar el correo electrónico de confirmación:', error);
+  //   }
+  // }
   
   async approveUser(id: number): Promise<void> {
     const user = await this.usersService.findOneById(id);
@@ -172,22 +149,52 @@ export class UserLogic {
 
   private async sendApprovalConfirmationEmail(user: User) {
 
-    const mailOptions = {
-        from: process.env.EMAIL_USER,
-        to: user.corporateEmail,
-        subject: 'Registro Aprobado',
-        html: `
-            <p>Hola ${user.name},</p>
-            <p>Tu solicitud de registro ha sido aprobada.</p>
-            <p>Bienvenido a nuestra plataforma.</p>
-        `,
-    };
+    const htmlContent = getApprovalConfirmationEmailTemplate(user);
+
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: user.corporateEmail,
+            subject: 'Bienvenido, ya eres parte del Plan Privilegios.',
+            html: htmlContent,
+        };
 
     try {
         await this.transporter.sendMail(mailOptions);
         console.log('Correo electrónico de confirmación de aprobación enviado');
     } catch (error) {
         console.error('Error al enviar el correo electrónico de confirmación de aprobación:', error);
+    }
+  }
+
+  async declineUser(id: number): Promise<void> {
+    const user = await this.usersService.findOneById(id);
+
+    if (!user) {
+        throw new NotFoundException('Usuario no encontrado.');
+    }
+
+    user.idStatus = 3;
+    await this.usersService.saveUser(user);
+
+    await this.sendDeclineEmail(user);
+  }
+
+  private async sendDeclineEmail(user: User) {
+
+    const htmlContent = getSendDeclineUserEmail(user);
+
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: user.corporateEmail,
+            subject: 'Lo sentimos, pero tenemos una oportunidad más.',
+            html: htmlContent,
+        };
+
+    try {
+        await this.transporter.sendMail(mailOptions);
+        console.log('Correo electrónico de rechazo enviado');
+    } catch (error) {
+        console.error('Error al enviar el correo electrónico de rechazo:', error);
     }
   }
 
@@ -203,26 +210,14 @@ export class UserLogic {
 
 
   private async sendRecoverPasswordMail(corporateEmail: string, name: string, id: number) {
-    const resetPasswordLink = `${this.frontendBaseUrl}/reset-password?userId=${encodeURIComponent(id)}`;
+    const htmlContent = getRecoverPasswordEmailTemplate(name, id, this.frontendBaseUrl);
 
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: corporateEmail,
-      subject: 'Recuperación de Contraseña',
-      html: `
-        <p>Hola, ${name}</p>
-        <p>Por favor presiona el botón para cambiar tu contraseña</p>
-        <p><a href="${resetPasswordLink}" target="_blank" style="
-            display: inline-block;
-            padding: 10px 20px;
-            font-size: 13px;
-            color: #FFFFFF;
-            background-color: #F50002;
-            text-decoration: none;
-            border-radius: 5px;
-        ">RESTAURAR CONTRASEÑA</a></p>
-      `,
-    };
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: corporateEmail,
+            subject: 'Cambio de Contraseña',
+            html: htmlContent,
+        };
 
     try {
       await this.transporter.sendMail(mailOptions);
@@ -244,10 +239,31 @@ export class UserLogic {
       user.password = hashedPassword;
       await this.usersService.saveUser(user);
 
+      await this.sendPasswordConfirmationEmail(user);
+
       return { message: 'Contraseña actualizada exitosamente' };
     } catch (error) {
       console.error('Error al restablecer la contraseña:', error);
       throw new Error('No se pudo restablecer la contraseña');
+    }
+  }
+
+  private async sendPasswordConfirmationEmail(user: User) {
+
+    const htmlContent = getSendPasswordConfirmationEmail(user);
+
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: user.corporateEmail,
+            subject: 'Cambio de Contraseña Exitoso',
+            html: htmlContent,
+        };
+
+    try {
+        await this.transporter.sendMail(mailOptions);
+        console.log('Correo electrónico de confirmación de cambio de contraseña enviado');
+    } catch (error) {
+        console.error('No se pudo enviar el correo electrónico de confirmación', error);
     }
   }
 

@@ -5,6 +5,7 @@ import { CommonModule } from './common/common.module';
 import { UserModule } from './user/user.module';
 import { PointClientModule } from './point-client/point-client.module'
 import { RedemptionsModule } from './redemptions/redemptions.module'
+import { CatalogueModule } from 'catalogue/catalogue.module';
 
 
 @Module({
@@ -24,7 +25,8 @@ import { RedemptionsModule } from './redemptions/redemptions.module'
     CommonModule,
     UserModule,
     PointClientModule,
-    RedemptionsModule
+    RedemptionsModule,
+    CatalogueModule
   ],
   controllers: [],
   providers: [],
