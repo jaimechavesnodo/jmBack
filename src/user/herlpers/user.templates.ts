@@ -53,12 +53,6 @@ export const getApproveEmailTemplate = (newUser: User, baseUrl: string) => {
     `;
 };
 
-
-// export const getRegistrationEmailTemplate = (name: string) => {
-//     return `Hola ${name},\n\nHemos recibido tu registro, en pronto nos comunicaremos contigo.\n`;
-// };
-
-
 export const getApprovalConfirmationEmailTemplate = (user: User) => {
     return `
         <p>¡Hola ${user.name}!</p>

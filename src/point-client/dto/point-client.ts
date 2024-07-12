@@ -1,12 +1,16 @@
-import { IsString } from "class-validator";
+import { IsInt, IsString, IsDecimal } from "class-validator";
 
 export class PointClientDto {
-    @IsString()
-    pointsCurrent: string;
 
-    @IsString()
-    pointsAccumulated: string;
+    @IsDecimal()
+    pointsCurrent: number; 
 
-    @IsString()
-    pointsToExpire: string;
+    @IsDecimal()
+    PointsAccumulatedPreviousMonth: number;
+
+    @IsDecimal()
+    pointsToExpire: number; 
+    
+    @IsInt()
+    idUser: number;
 }

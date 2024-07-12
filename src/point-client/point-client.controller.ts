@@ -8,8 +8,8 @@ import { PointClientDto } from './dto/point-client'
 export class PointClientController {
   constructor(private readonly PointClientService: PointClientService, private readonly PointClientLogic: PointClientLogic) { }
 
-  @Get('getPointClient/:id')
-  findOne(@Param('id') id: string): Promise<PointClientDto> {
-    return this.PointClientService.findOne(+id);
+  @Get('getPointClient/:idUser')
+  findOne(@Param('idUser') idUser: number): Promise<PointClientDto> {
+    return this.PointClientService.findOne(+idUser);
   }
-}
+} 

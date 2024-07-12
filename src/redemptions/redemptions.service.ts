@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RedemptionsCustomerDto } from './dto/customer-redemptions'
 import { CustomerRedemptions } from './entities/redemptions.entity';
+import { CreateRedemptionDto } from './dto/create-redemption';
 
 
 @Injectable()
@@ -26,5 +27,10 @@ export class RedemptionsService {
 
     qb = qb.skip(skip).take(limit);
     return qb.getMany();
+    }
+
+    async create(createRedemptionDto: CreateRedemptionDto): Promise<CustomerRedemptions> {
+        const redemption = this.redemptionRepository.create(createRedemptionDto);
+        return this.redemptionRepository.save(redemption);
     }
 }

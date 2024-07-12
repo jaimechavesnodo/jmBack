@@ -6,6 +6,8 @@ import { UserModule } from './user/user.module';
 import { PointClientModule } from './point-client/point-client.module'
 import { RedemptionsModule } from './redemptions/redemptions.module'
 import { CatalogueModule } from 'catalogue/catalogue.module';
+import { ProductModule } from 'product/product.module';
+import { ShoppingModule } from 'shopping-cart/shopping.module';
 
 
 @Module({
@@ -26,7 +28,9 @@ import { CatalogueModule } from 'catalogue/catalogue.module';
     UserModule,
     PointClientModule,
     RedemptionsModule,
-    CatalogueModule
+    CatalogueModule,
+    ShoppingModule,
+    ProductModule
   ],
   controllers: [],
   providers: [],

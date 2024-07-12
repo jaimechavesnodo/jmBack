@@ -11,8 +11,11 @@ export class CustomerRedemptions {
   @Column()
   redemptionDate: Date;
 
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  pointsProduct: number;
+
   @Column()
-  points: string;
+  idUser: number;
 
 }
 

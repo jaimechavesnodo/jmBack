@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('redeemableJM')
+@Entity('categoriesRedeemableJM')
 export class Catalogue {
   @PrimaryGeneratedColumn()
   id: number;
@@ -8,11 +8,5 @@ export class Catalogue {
   @Column()
   name: string;
 
-  @Column()
-  imageUrl: string;
-
-  @Column()
-  idcategories: string;
-  
 }
 

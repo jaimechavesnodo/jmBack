@@ -5,12 +5,16 @@ export class pointClient {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
-    pointsCurrent: string;
+    @Column('decimal', { precision: 10, scale: 2 })
+    pointsCurrent: number;
+
+    @Column('decimal', { precision: 10, scale: 2 })
+    PointsAccumulatedPreviousMonth: number;
+
+    @Column('decimal', { precision: 10, scale: 2 })
+    pointsToExpire: number;
 
     @Column()
-    pointsAccumulated: string;
+    idUser: number;
 
-    @Column()
-    pointsToExpire: string;
 }

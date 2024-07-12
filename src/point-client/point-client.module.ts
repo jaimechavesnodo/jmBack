@@ -10,5 +10,6 @@ import { pointClient } from './entities/point-client.entity';
     imports: [TypeOrmModule.forFeature([pointClient])],
     providers: [PointClientService,PointClientLogic],
     controllers: [PointClientController],
+    exports: [PointClientService, PointClientLogic],
   })
   export class PointClientModule {}

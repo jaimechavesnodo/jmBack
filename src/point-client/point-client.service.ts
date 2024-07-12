@@ -17,4 +17,12 @@ export class PointClientService {
     findOne( id: number ): Promise<pointClient> {
         return this.PointClientRepository.findOneBy({ id });
     }
+    
+    findOneBy( id: number ): Promise<pointClient> {
+        return this.PointClientRepository.findOneBy({ id });
+    }
+
+    async save(client: pointClient): Promise<pointClient> {
+        return this.PointClientRepository.save(client);
+    }
 }

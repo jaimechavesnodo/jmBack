@@ -7,11 +7,5 @@ export class CatalogueDto {
 
     @IsString()
     name: string;
-
-    @IsString()
-    imageUrl: string;
-
-    @IsString()
-    idcategories: string;
 }
 

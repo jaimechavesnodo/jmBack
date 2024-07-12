@@ -7,7 +7,7 @@ import {ProductCartDto } from './dto/product-cart'
 export class ShoppingController {
     constructor(private readonly shoppingService: ShoppingService, private readonly shoppingLogic: ShoppingLogic) { }
     
-  @Get('getProductsCart/:idProduct')
+  @Get('getCartData/:idProduct')
   findOne(@Param('idProduct') idProduct: number): Promise<ProductCartDto> {
     return this.shoppingService.findOne(idProduct);
   }

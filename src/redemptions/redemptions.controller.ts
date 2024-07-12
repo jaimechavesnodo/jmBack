@@ -3,6 +3,7 @@ import { RedemptionsLogic } from './redemptions.logic';
 import { RedemptionsService } from './redemptions.service';
 import { RedemptionsCustomerDto } from './dto/customer-redemptions'
 import { CustomerRedemptions } from './entities/redemptions.entity';
+import { CreateRedemptionDto } from './dto/create-redemption';
 
 
 @Controller('Redemptions')
@@ -12,5 +13,10 @@ export class RedemptionsController {
     @Get('getRedemptionsCustomer')
     findAll(@Query() params: RedemptionsCustomerDto): Promise<CustomerRedemptions[]> {
         return this.redemptionsService.findAll(params);
+    }
+
+    @Post('CreateRedeemtion')
+    async CreateRedeemtion(@Body() createRedemptionDto: CreateRedemptionDto): Promise<CustomerRedemptions> {
+        return this.redemptionsLogic.CreateRedeemtion(createRedemptionDto);
     }
 }

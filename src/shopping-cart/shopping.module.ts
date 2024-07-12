@@ -11,4 +11,4 @@ import { ShoppingCart } from './entities/shopping.entity';
     providers: [ShoppingService,ShoppingLogic],
     controllers: [ShoppingController],
   })
-    export class RedemptionsModule {}
+    export class ShoppingModule {}
