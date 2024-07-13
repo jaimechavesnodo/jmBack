@@ -8,6 +8,7 @@ import { RedemptionsModule } from './redemptions/redemptions.module'
 import { CatalogueModule } from 'catalogue/catalogue.module';
 import { ProductModule } from 'product/product.module';
 import { ShoppingModule } from 'shopping-cart/shopping.module';
+import { SubcategoriesCatalogoModule } from 'SubCategories/subcategories.module';
 
 
 @Module({
@@ -30,7 +31,8 @@ import { ShoppingModule } from 'shopping-cart/shopping.module';
     RedemptionsModule,
     CatalogueModule,
     ShoppingModule,
-    ProductModule
+    ProductModule,
+    SubcategoriesCatalogoModule
   ],
   controllers: [],
   providers: [],
