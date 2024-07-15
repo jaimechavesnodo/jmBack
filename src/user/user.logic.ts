@@ -72,7 +72,8 @@ export class UserLogic {
     const accessToken = this.jwtService.sign(payload, { secret: secretKey });
     
     return {
-      access_token: accessToken
+      access_token: accessToken,
+      idUser: user.id
     };
   }
 

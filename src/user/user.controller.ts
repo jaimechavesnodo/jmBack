@@ -21,11 +21,6 @@ export class UserController {
       return newUser;
     }
 
-    // @Get('approveEmail/:id')
-    // async approveUser(@Param('id') id: number): Promise<void> {
-    // await this.userLogic.approveUser(id);
-    // }
-
     @Get('approveEmail/:id')
     async approveUser(@Param('id') id: number): Promise<string> {
       await this.userLogic.approveUser(id);
