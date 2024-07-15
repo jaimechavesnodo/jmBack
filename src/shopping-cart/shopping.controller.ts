@@ -1,14 +1,22 @@
-import { Controller, Get, Query, Param, Post, Body } from '@nestjs/common';
+import { Controller, Get, Param, Delete, HttpStatus } from '@nestjs/common';
 import { ShoppingService } from './shopping.service';
 import { ShoppingLogic } from './shopping.logic';
-import {ProductCartDto } from './dto/product-cart'
+import { ShoppingCart } from './entities/shopping.entity';
 
 @Controller('Shopping')
 export class ShoppingController {
     constructor(private readonly shoppingService: ShoppingService, private readonly shoppingLogic: ShoppingLogic) { }
     
-  @Get('getCartData/:idProduct')
-  findOne(@Param('idProduct') idProduct: number): Promise<ProductCartDto> {
-    return this.shoppingService.findOne(idProduct);
+
+  @Get('getCartData/:idUser')
+  async findAll(@Param('idUser') idUser: number): Promise<ShoppingCart[]> {
+    return this.shoppingService.findAll(idUser);
   }
+
+  @Delete('deleteProduct/:idUser/:idProduct')
+  async deleteProduct(@Param('idUser') idUser: number, @Param('idProduct') idProduct: number,
+  ): Promise<void> {
+    await this.shoppingService.deleteProduct(idUser, idProduct);
+  } 
+
 }

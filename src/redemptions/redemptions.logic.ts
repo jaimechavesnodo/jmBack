@@ -14,16 +14,32 @@ export class RedemptionsLogic {
         private readonly pointClientLogic: PointClientLogic
     ) {}
 
-    async CreateRedeemtion(createRedemptionDto: CreateRedemptionDto): Promise<CustomerRedemptions> {
-    const { idUser, pointsProduct } = createRedemptionDto;
-
-    // Obtener puntos actuales del cliente
-    const clientPoints = await this.pointClientService.findOne(idUser);
-    if (clientPoints.pointsCurrent < pointsProduct) {
-    throw new HttpException('Insufficient points', HttpStatus.BAD_REQUEST);
+    async createRedeemtion(createRedemptionDtoOrList: CreateRedemptionDto | CreateRedemptionDto[]): Promise<CustomerRedemptions | CustomerRedemptions[]> {
+        if (Array.isArray(createRedemptionDtoOrList)) {
+            // Si es una lista de objetos
+            const createdRedemptions: CustomerRedemptions[] = [];
+            
+            for (const createRedemptionDto of createRedemptionDtoOrList) {
+                const createdRedemption = await this.createSingleRedeemtion(createRedemptionDto);
+                createdRedemptions.push(createdRedemption);
+            }
+            
+            return createdRedemptions;
+        } else {
+            // Si es un solo objeto
+            return this.createSingleRedeemtion(createRedemptionDtoOrList);
+        }
     }
 
-    await this.pointClientLogic.deductPoints(idUser, pointsProduct);
-    return this.redemptionsService.create(createRedemptionDto);
+    private async createSingleRedeemtion(createRedemptionDto: CreateRedemptionDto): Promise<CustomerRedemptions> {
+        const { idUser, pointsProduct } = createRedemptionDto;
+
+        const clientPoints = await this.pointClientService.findOne(idUser);
+        if (!clientPoints || clientPoints.pointsCurrent < pointsProduct) {
+            throw new HttpException('Insufficient points', HttpStatus.BAD_REQUEST);
+        }
+
+        await this.pointClientLogic.deductPoints(idUser, pointsProduct);
+        return this.redemptionsService.create(createRedemptionDto);
     }
 }

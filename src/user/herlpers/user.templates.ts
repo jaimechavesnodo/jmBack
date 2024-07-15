@@ -66,15 +66,24 @@ export const getApprovalConfirmationEmailTemplate = (user: User) => {
 
 
 export const getRecoverPasswordEmailTemplate = (name: string, id: number, frontendBaseUrl: string) => {
-    const resetPasswordLink = `${frontendBaseUrl}/reset-password?userId=${encodeURIComponent(id)}`;
+    const resetPasswordLink = `${frontendBaseUrl}/crear-contrasena?userId=${encodeURIComponent(id)}`;
 
     return `
         <p>¡Hola ${name}!</p>
         <p>Hemos recibido tu solicitud para realizar el cambio de tu contraseña, 
-        por favor ingresa al siguiente enlace para continuar con el proceso:</p>
-        <br>
-        <p><a href="${resetPasswordLink}" target="_blank">${resetPasswordLink}</a></p>
-        <br>
+        por favor presiona el botón para continuar con el proceso:</p>
+        <div style="display: flex; justify-content: center; ">
+            <a href="${resetPasswordLink}" target="_blank" style="
+                display: inline-block;
+                padding: 10px 20px;
+                font-size: 16px;
+                color: #FFFFFF;
+                background-color: #4CAF50;
+                text-decoration: none;
+                border-radius: 5px;
+                margin-right: 10px;
+            ">Cambiar Contraseña</a>
+        </div>
         <p>Equipo Soporte</p>
         <p>JMalucelli Travelers Seguros.</p>
 

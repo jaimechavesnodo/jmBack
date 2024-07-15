@@ -6,15 +6,17 @@ export class ShoppingCart {
   id: number;
 
   @Column()
-  idProduct: string;
+  idProduct: number;
 
   @Column()
   redeemedAmount: number;
+  
+  @Column('decimal', { precision: 10, scale: 2 })
+  pointsProduct: number;
 
+  @Column('decimal', { precision: 10, scale: 2 })
+  total: number;
+  
   @Column()
-  points: string;
-
-  @Column()
-  total: string;
-
+  idUser: number; 
 }

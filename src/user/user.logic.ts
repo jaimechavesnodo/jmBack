@@ -229,7 +229,7 @@ export class UserLogic {
   }
 
 
-  async recoverPassword(id: number, password: string): Promise<{ message: string }> {
+  async recoverPassword(id: number, password: string): Promise<{ message: string, idUser: number}> {
     try {
       const user = await this.usersService.findOneById(id);
       if (!user) {
@@ -242,7 +242,9 @@ export class UserLogic {
 
       await this.sendPasswordConfirmationEmail(user);
 
-      return { message: 'Contraseña actualizada exitosamente' };
+      return { message: 'Contraseña actualizada exitosamente',
+        idUser: user.id
+      };
     } catch (error) {
       console.error('Error al restablecer la contraseña:', error);
       throw new Error('No se pudo restablecer la contraseña');

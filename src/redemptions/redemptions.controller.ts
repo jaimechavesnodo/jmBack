@@ -16,7 +16,7 @@ export class RedemptionsController {
     }
 
     @Post('CreateRedeemtion')
-    async CreateRedeemtion(@Body() createRedemptionDto: CreateRedemptionDto): Promise<CustomerRedemptions> {
-        return this.redemptionsLogic.CreateRedeemtion(createRedemptionDto);
+    async createRedeemtion(@Body() createRedemptionDtoOrList: CreateRedemptionDto | CreateRedemptionDto[]): Promise<CustomerRedemptions | CustomerRedemptions[]> {
+        return this.redemptionsLogic.createRedeemtion(createRedemptionDtoOrList);
     }
 }

@@ -35,7 +35,7 @@ export class UserController {
     @Post('recoverPassword/:id')
     async recoverPassword(@Param('id') id: number, @Body() recoverPasswordDto: RecoverPasswordDto) {
     return this.userLogic.recoverPassword(id, recoverPasswordDto.password);
-    }
+    } 
 
     @Get('declineUser/:id')
     async declineUser(@Param('id') id: number) {
