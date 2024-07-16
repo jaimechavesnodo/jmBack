@@ -66,7 +66,7 @@ export const getApprovalConfirmationEmailTemplate = (user: User) => {
 
 
 export const getRecoverPasswordEmailTemplate = (name: string, id: number, frontendBaseUrl: string) => {
-    const resetPasswordLink = `${frontendBaseUrl}/crear-contrasena?userId=${encodeURIComponent(id)}`;
+    const resetPasswordLink = `${frontendBaseUrl}/crear-contrasena/${encodeURIComponent(id)}`;
 
     return `
         <p>¡Hola ${name}!</p>

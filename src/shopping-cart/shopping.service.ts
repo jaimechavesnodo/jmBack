@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ShoppingCart } from './entities/shopping.entity';
+import { CreateShoppingCartDto } from './dto/save-product-cart';
 
 
 
@@ -26,5 +27,10 @@ export class ShoppingService {
         if (result.affected === 0) {
         throw new NotFoundException(`Product with ID ${idProduct} not found in the shopping cart for user with ID ${idUser}`);
         }
+    }
+
+    async create(createShoppingCartDto: CreateShoppingCartDto): Promise<ShoppingCart> {
+        const newShoppingCart = this.shoppingRepository.create(createShoppingCartDto);
+        return await this.shoppingRepository.save(newShoppingCart);
     }
 }

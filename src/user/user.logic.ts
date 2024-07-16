@@ -92,10 +92,6 @@ export class UserLogic {
     const approveEmailRecipients = process.env.APPROVE_EMAIL_RECIPIENTS.split(',');
     await this.sendApproveEmail(newUser, approveEmailRecipients);
 
-    // if (newUser.corporateEmail) {
-    //   await this.sendRegistrationEmail(newUser.corporateEmail, newUser.name);
-    // }
-
     return newUser;
   }
 
@@ -116,24 +112,6 @@ export class UserLogic {
         console.error('Error al enviar el correo electrónico:', error);
     }
   }
-
-  // private async sendRegistrationEmail(corporateEmail: string, name: string) {
-  //   const textContent = getRegistrationEmailTemplate(name);
-
-  //       const mailOptions = {
-  //           from: process.env.EMAIL_USER,
-  //           to: corporateEmail,
-  //           subject: 'SOLICITUD DE REGISTRO',
-  //           text: textContent,
-  // };
-
-  //   try {
-  //     await this.transporter.sendMail(mailOptions);
-  //     console.log('Correo electrónico de confirmación enviado');
-  //   } catch (error) {
-  //     console.error('Error al enviar el correo electrónico de confirmación:', error);
-  //   }
-  // }
   
   async approveUser(id: number): Promise<void> {
     const user = await this.usersService.findOneById(id);

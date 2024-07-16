@@ -1,7 +1,8 @@
-import { Controller, Get, Param, Delete, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, HttpStatus } from '@nestjs/common';
 import { ShoppingService } from './shopping.service';
 import { ShoppingLogic } from './shopping.logic';
 import { ShoppingCart } from './entities/shopping.entity';
+import { CreateShoppingCartDto } from './dto/save-product-cart';
 
 @Controller('Shopping')
 export class ShoppingController {
@@ -17,6 +18,11 @@ export class ShoppingController {
   async deleteProduct(@Param('idUser') idUser: number, @Param('idProduct') idProduct: number,
   ): Promise<void> {
     await this.shoppingService.deleteProduct(idUser, idProduct);
-  } 
+  }
 
+  @Post('saveProductsCart')
+  async saveProductsCart(@Body() createShoppingCartDto: CreateShoppingCartDto) {
+  return this.shoppingService.create(createShoppingCartDto);
+  }
+  
 }

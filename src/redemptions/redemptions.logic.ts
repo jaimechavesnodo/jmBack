@@ -16,7 +16,7 @@ export class RedemptionsLogic {
 
     async createRedeemtion(createRedemptionDtoOrList: CreateRedemptionDto | CreateRedemptionDto[]): Promise<CustomerRedemptions | CustomerRedemptions[]> {
         if (Array.isArray(createRedemptionDtoOrList)) {
-            // Si es una lista de objetos
+
             const createdRedemptions: CustomerRedemptions[] = [];
             
             for (const createRedemptionDto of createRedemptionDtoOrList) {
@@ -26,7 +26,6 @@ export class RedemptionsLogic {
             
             return createdRedemptions;
         } else {
-            // Si es un solo objeto
             return this.createSingleRedeemtion(createRedemptionDtoOrList);
         }
     }

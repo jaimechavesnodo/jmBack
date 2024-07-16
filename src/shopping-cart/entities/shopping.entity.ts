@@ -19,4 +19,10 @@ export class ShoppingCart {
   
   @Column()
   idUser: number; 
+
+  @Column()
+  imageUrl: string;
+
+  @Column()
+  description: string; 
 }
