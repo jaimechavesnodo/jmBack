@@ -12,4 +12,5 @@ export class PointClientController {
   findOne(@Param('idUser') idUser: number): Promise<PointClientDto> {
     return this.PointClientService.findOne(+idUser);
   }
+  
 } 

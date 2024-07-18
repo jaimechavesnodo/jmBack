@@ -1,6 +1,6 @@
 import { IsInt, IsNumber, IsString } from "class-validator";
 
-export class CreateShoppingCartDto {
+export class GetShoppingCart {
 
     @IsInt()
     idProduct: number;

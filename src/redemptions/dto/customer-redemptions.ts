@@ -18,6 +18,8 @@ export class RedemptionsCustomerDto {
     @IsInt()
     @Min(1)
     limit: number = 10;  
+    
 }
+
 
 

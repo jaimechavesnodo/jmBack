@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ShoppingCart } from './entities/shopping.entity';
 import { CreateShoppingCartDto } from './dto/save-product-cart';
+import { GetShoppingCart } from './dto/shopping-customer';
 
 
 
@@ -13,9 +14,15 @@ export class ShoppingService {
     private shoppingRepository: Repository<ShoppingCart>,
     ) {}
 
-    findAll(idUser: number): Promise<ShoppingCart[]> {
-        return this.shoppingRepository.find ({ where: { idUser: idUser },});
-    } 
+    async getDtoShopping(dto: GetShoppingCart): Promise<ShoppingCart> {
+        const { idUser, idProduct } = dto;
+        const shoppingCart = await this.shoppingRepository.findOne({ where: { idUser, idProduct },});
+        return shoppingCart;
+    }
+
+    findOneByUser( idUser: number ): Promise<ShoppingCart> {
+        return this.shoppingRepository.findOneBy({ idUser });
+    }
 
     findOne( id: number ): Promise<ShoppingCart> {
         return this.shoppingRepository.findOneBy({ id });
@@ -23,14 +30,40 @@ export class ShoppingService {
 
     async deleteProduct(idUser: number, idProduct: number): Promise<void> {
         const result = await this.shoppingRepository.delete({ idUser, idProduct });
-    
-        if (result.affected === 0) {
-        throw new NotFoundException(`Product with ID ${idProduct} not found in the shopping cart for user with ID ${idUser}`);
-        }
     }
 
-    async create(createShoppingCartDto: CreateShoppingCartDto): Promise<ShoppingCart> {
-        const newShoppingCart = this.shoppingRepository.create(createShoppingCartDto);
-        return await this.shoppingRepository.save(newShoppingCart);
+    async create(dto: CreateShoppingCartDto): Promise<ShoppingCart> {
+        const newShoppingCart = this.shoppingRepository.create(dto);
+        return this.shoppingRepository.save(newShoppingCart); 
     }
+    
+    async findCountAndSumTotalForIdProduct(idProduct: number, idUser: number): Promise<{ cantidadRedimida: number, totalSuma: number }> {
+        const queryResult = await this.shoppingRepository
+            .createQueryBuilder('shopping')
+            .select('COUNT(*)', 'cantidadRedimida')
+            .addSelect('SUM(shopping.total)', 'totalSuma')
+            .where('shopping.idProduct = :idProduct', { idProduct })
+            .andWhere('shopping.idUser = :idUser', { idUser })
+            .getRawOne();
+    
+        return {
+            cantidadRedimida: parseInt(queryResult.cantidadRedimida, 10),
+            totalSuma: parseFloat(queryResult.totalSuma),
+        };
+    }
+
+    async findCountAndSumTotal(idUser: number): Promise<{ totalRegistros: number, totalSuma: number }> {
+        const queryResult = await this.shoppingRepository
+            .createQueryBuilder('shopping')
+            .select('COUNT(*)', 'totalRegistros')
+            .addSelect('SUM(shopping.total)', 'totalSuma')
+            .andWhere('shopping.idUser = :idUser', { idUser })
+            .getRawOne();
+    
+        return {
+            totalRegistros: parseInt(queryResult.totalRegistros, 10),
+            totalSuma: parseFloat(queryResult.totalSuma),
+        };
+    }
+    
 }

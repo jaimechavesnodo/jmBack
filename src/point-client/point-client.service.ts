@@ -14,8 +14,8 @@ export class PointClientService {
         return this.PointClientRepository.find();
     } 
 
-    findOne( id: number ): Promise<pointClient> {
-        return this.PointClientRepository.findOneBy({ id });
+    findOne( idUser: number ): Promise<pointClient> {
+        return this.PointClientRepository.findOneBy({ idUser });
     }
     
     findOneBy( id: number ): Promise<pointClient> {

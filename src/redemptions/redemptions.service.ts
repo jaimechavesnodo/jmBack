@@ -13,21 +13,24 @@ export class RedemptionsService {
     private redemptionRepository: Repository<CustomerRedemptions>,
     ) {}
 
-    async findAll(params: RedemptionsCustomerDto): Promise<CustomerRedemptions[]> {
-    const { orderName, redemptionDate, page, limit } = params;
-    const skip = page * limit;
+    async findAll(params: RedemptionsCustomerDto, idUser: number): Promise<CustomerRedemptions[]> {
+        const { orderName, redemptionDate, page, limit } = params;
+        const skip = page * limit;
+        
+        let qb = this.redemptionRepository.createQueryBuilder('redemption');
+        if (orderName) {
+            qb = qb.andWhere('redemption.orderName = :orderName', { orderName });
+        }
+        if (redemptionDate) {
+            qb = qb.andWhere('redemption.redemptionDate = :redemptionDate', { redemptionDate });
+        }
+        
+        qb = qb.andWhere('redemption.idUser = :idUser', { idUser });
     
-    let qb = this.redemptionRepository.createQueryBuilder('redemption');
-    if (orderName) {
-        qb = qb.andWhere('redemption.orderName = :orderName', { orderName });
+        qb = qb.skip(skip).take(limit);
+        return qb.getMany();
     }
-    if (redemptionDate) {
-        qb = qb.andWhere('redemption.redemptionDate = :redemptionDate', { redemptionDate });
-    }
-
-    qb = qb.skip(skip).take(limit);
-    return qb.getMany();
-    }
+    
 
     async create(createRedemptionDto: CreateRedemptionDto): Promise<CustomerRedemptions> {
         const redemption = this.redemptionRepository.create(createRedemptionDto);
