@@ -56,7 +56,7 @@ export const getApproveEmailTemplate = (newUser: User, baseUrl: string) => {
 export const getApprovalConfirmationEmailTemplate = (user: User) => {
     return `
         <p>¡Hola ${user.name}!</p>
-        <p>Desde ahora puedes ingresar a nuestro portal (poner el link). 
+        <p>Desde ahora puedes ingresar a nuestro portal https://jmfront.azurewebsites.net/ . 
         Recuerda guardar usuario y contraseña para acceder a todos los beneficios del plan de Privilegios.</p>
         <br>
         <p>Equipo Soporte</p>
