@@ -3,8 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ShoppingCart } from './entities/shopping.entity';
 import { CreateShoppingCartDto } from './dto/save-product-cart';
-import { GetShoppingCart } from './dto/shopping-customer';
-
 
 
 @Injectable()
@@ -13,16 +11,6 @@ export class ShoppingService {
         @InjectRepository(ShoppingCart)
     private shoppingRepository: Repository<ShoppingCart>,
     ) {}
-
-    async getDtoShopping(dto: GetShoppingCart): Promise<ShoppingCart> {
-        const { idUser, idProduct } = dto;
-        const shoppingCart = await this.shoppingRepository.findOne({ where: { idUser, idProduct },});
-        return shoppingCart;
-    }
-
-    findOneByUser( idUser: number ): Promise<ShoppingCart> {
-        return this.shoppingRepository.findOneBy({ idUser });
-    }
 
     findOne( id: number ): Promise<ShoppingCart> {
         return this.shoppingRepository.findOneBy({ id });
@@ -52,18 +40,31 @@ export class ShoppingService {
         };
     }
 
-    async findCountAndSumTotal(idUser: number): Promise<{ totalRegistros: number, totalSuma: number }> {
+    async getAggregatedData(idUser: number) {
         const queryResult = await this.shoppingRepository
             .createQueryBuilder('shopping')
-            .select('COUNT(*)', 'totalRegistros')
-            .addSelect('SUM(shopping.total)', 'totalSuma')
-            .andWhere('shopping.idUser = :idUser', { idUser })
-            .getRawOne();
+            .select('shopping.idProduct', 'idProduct')
+            .addSelect('COUNT(*)', 'redeemedAmount')
+            .addSelect('SUM(shopping.pointsProduct)', 'pointsProduct')
+            .addSelect('SUM(shopping.total)', 'total')
+            .addSelect('shopping.idUser', 'idUser')
+            .addSelect('shopping.imageUrl', 'imageUrl')
+            .addSelect('shopping.description', 'description')
+            .where('shopping.idUser = :idUser', { idUser })
+            .groupBy('shopping.idProduct')
+            .addGroupBy('shopping.idUser')
+            .addGroupBy('shopping.imageUrl')
+            .addGroupBy('shopping.description')
+            .getRawMany();
     
-        return {
-            totalRegistros: parseInt(queryResult.totalRegistros, 10),
-            totalSuma: parseFloat(queryResult.totalSuma),
-        };
+        return queryResult.map(result => ({
+            idProduct: result.idProduct,
+            redeemedAmount: parseInt(result.redeemedAmount, 10),
+            pointsProduct: parseFloat(result.pointsProduct),
+            total: parseFloat(result.total),
+            idUser: result.idUser,
+            imageUrl: result.imageUrl,
+            description: result.description,
+        }));
     }
-    
 }

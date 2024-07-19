@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ShoppingService } from './shopping.service';
 import { CreateShoppingCartDto } from './dto/save-product-cart';
-import { GetShoppingCart } from './dto/shopping-customer';
 
 
 @Injectable()
@@ -19,17 +18,5 @@ export class ShoppingLogic {
             data: newShoppingCart, 
         };
     }
-
-    async findAndGetData(idUser: number, idProduct: number): Promise<any> {
-        const newShoppingCart = await this.shoppingService.findOneByUser(idUser);
-        const queryResult = await this.shoppingService.findCountAndSumTotalForIdProduct(idProduct, idUser);
-        
-        return {
-            cantidadRedimida: queryResult.cantidadRedimida,
-            totalSuma: queryResult.totalSuma,
-            data: newShoppingCart, 
-        };
-    }
-
 
 }
