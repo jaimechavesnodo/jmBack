@@ -40,18 +40,33 @@ export class ShoppingService {
         };
     }
 
+    async findCountAndSumTotal(idUser: number): Promise<{ totalRegistros: number, totalSuma: number }> {
+        const queryResult = await this.shoppingRepository
+            .createQueryBuilder('shopping')
+            .select('COUNT(*)', 'totalRegistros')
+            .addSelect('SUM(shopping.total)', 'totalSuma')
+            .andWhere('shopping.idUser = :idUser', { idUser })
+            .getRawOne();
+
+        return {
+            totalRegistros: parseInt(queryResult.totalRegistros, 10),
+            totalSuma: parseFloat(queryResult.totalSuma),
+        };
+    }
+
     async getAggregatedData(idUser: number) {
         const queryResult = await this.shoppingRepository
             .createQueryBuilder('shopping')
             .select('shopping.idProduct', 'idProduct')
             .addSelect('COUNT(*)', 'redeemedAmount')
-            .addSelect('SUM(shopping.pointsProduct)', 'pointsProduct')
+            .addSelect('shopping.pointsProduct', 'pointsProduct')
             .addSelect('SUM(shopping.total)', 'total')
             .addSelect('shopping.idUser', 'idUser')
             .addSelect('shopping.imageUrl', 'imageUrl')
             .addSelect('shopping.description', 'description')
             .where('shopping.idUser = :idUser', { idUser })
             .groupBy('shopping.idProduct')
+            .addGroupBy('shopping.pointsProduct')
             .addGroupBy('shopping.idUser')
             .addGroupBy('shopping.imageUrl')
             .addGroupBy('shopping.description')
@@ -67,4 +82,5 @@ export class ShoppingService {
             description: result.description,
         }));
     }
+    
 }

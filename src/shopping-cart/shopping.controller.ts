@@ -23,5 +23,10 @@ export class ShoppingController {
       const { idProduct, idUser, dto } = body;
     return this.shoppingLogic.createAndFindSummary(dto, idProduct, idUser);
   }
+
+  @Get('totalSummary/:idUser')
+  async getSummaryTotal(@Param('idUser') idUser: number) {
+    return this.shoppingService.findCountAndSumTotal(idUser);
+  }
   
 }
