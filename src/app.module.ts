@@ -11,6 +11,7 @@ import { ShoppingModule } from 'shopping-cart/shopping.module';
 import { SubcategoriesCatalogoModule } from 'SubCategories/subcategories.module';
 
 
+
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -32,9 +33,12 @@ import { SubcategoriesCatalogoModule } from 'SubCategories/subcategories.module'
     CatalogueModule,
     ShoppingModule,
     ProductModule,
-    SubcategoriesCatalogoModule
+    SubcategoriesCatalogoModule,
+    ConfigModule
   ],
   controllers: [],
   providers: [],
 })
 export class AppModule {}
+
+

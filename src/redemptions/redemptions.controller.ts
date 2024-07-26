@@ -10,13 +10,10 @@ import { CreateRedemptionDto } from './dto/create-redemption';
 export class RedemptionsController {
     constructor(private readonly redemptionsService: RedemptionsService, private readonly redemptionsLogic: RedemptionsLogic) { }
 
-@Get('getRedemptionsCustomer/:idUser')
-findAll(
-    @Param('idUser') idUser: number,
-    @Query() params: RedemptionsCustomerDto
-): Promise<CustomerRedemptions[]> {
-    return this.redemptionsService.findAll(params, idUser);
-}
+    @Get('getRedemptionsCustomer/:idUser')
+    findAll( @Param('idUser') idUser: number, @Query() params: RedemptionsCustomerDto): Promise<CustomerRedemptions[]> {
+        return this.redemptionsService.findAll(params, idUser);
+    }
 
 
     @Post('CreateRedeemtion')
