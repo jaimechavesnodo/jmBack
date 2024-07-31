@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { RedemptionsCustomerDto } from './dto/customer-redemptions'
 import { CustomerRedemptions } from './entities/redemptions.entity';
 import { CreateRedemptionDto } from './dto/create-redemption';
+import { GetRedemptionDto } from './dto/get-redemptions';
 
 
 @Injectable()
@@ -13,7 +14,7 @@ export class RedemptionsService {
     private redemptionRepository: Repository<CustomerRedemptions>,
     ) {}
 
-    async findAll(params: RedemptionsCustomerDto, idUser: number): Promise<CustomerRedemptions[]> {
+    async findAll(params: RedemptionsCustomerDto, idUser: number): Promise<GetRedemptionDto[]> {
         const { orderName, redemptionDate, page, limit } = params;
         const skip = page * limit;
         
@@ -28,7 +29,15 @@ export class RedemptionsService {
         qb = qb.andWhere('redemption.idUser = :idUser', { idUser });
     
         qb = qb.skip(skip).take(limit);
-        return qb.getMany();
+        const redemptions = await qb.getMany();
+
+        return redemptions.map(redemption => ({
+            id: redemption.id,
+            orderName: redemption.orderName,
+            redemptionDate: redemption.redemptionDate.toISOString().split('T')[0],
+            pointsProduct: redemption.pointsProduct,
+            idUser: redemption.idUser,
+        }));
     }
     
 
