@@ -8,7 +8,7 @@ import { CreateUserDto } from './dto/create-user';
 import { EmailUserDto } from './dto/email-user';
 import * as bcrypt from 'bcrypt';
 import { getApproveEmailTemplate, getRecoverPasswordEmailTemplate, getApprovalConfirmationEmailTemplate, getSendPasswordConfirmationEmail, getSendDeclineUserEmail, getSendRegistrationUser } from './herlpers/user.templates';
-import { MailerService } from './herlpers/mail.services';
+import { EmailService } from './herlpers/email.services';
 
 @Injectable()
 export class UserLogic {
@@ -18,8 +18,7 @@ export class UserLogic {
   constructor(
     private readonly usersService: UserService,
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
-    private readonly mailerService: MailerService,
+    private readonly emailService: EmailService
   ) {
     this.baseUrl = process.env.BASE_URL;
     this.frontendBaseUrl = process.env.BASE_URL_FRONTEND;
@@ -27,7 +26,7 @@ export class UserLogic {
 
   async enviarCorreo(destinatario: string, asunto: string, cuerpo: string) {
     try {
-      await this.mailerService.sendMail(destinatario, asunto, cuerpo);
+      await this.emailService.sendEmail(destinatario, asunto, cuerpo);
       console.log('Correo enviado');
     } catch (error) {
       console.error('Error al enviar el correo:', error);
@@ -81,11 +80,11 @@ export class UserLogic {
   }
 
   private async sendApproveEmail(newUser: User, recipients: string[]) {
-    const htmlContent = getApproveEmailTemplate(newUser, this.baseUrl);
+    const htmlContent = getApproveEmailTemplate(newUser);
 
     try {
-      await this.mailerService.sendMail(
-        recipients.join(','),
+      await this.emailService.sendEmail(
+        recipients,
         'Nueva Activación de usuario',
         htmlContent
       );
@@ -99,7 +98,7 @@ export class UserLogic {
     const textContent = getSendRegistrationUser();
 
     try {
-      await this.mailerService.sendMail(
+      await this.emailService.sendEmail(
         corporateEmail,
         'Bienvenido, ya eres parte del Plan Privilegios.',
         textContent
@@ -127,7 +126,7 @@ export class UserLogic {
     const htmlContent = getApprovalConfirmationEmailTemplate(user);
 
     try {
-      await this.mailerService.sendMail(
+      await this.emailService.sendEmail(
         user.corporateEmail,
         'Bienvenido, ya eres parte del Plan Privilegios.',
         htmlContent
@@ -155,7 +154,7 @@ export class UserLogic {
     const htmlContent = getSendDeclineUserEmail(user);
 
     try {
-      await this.mailerService.sendMail(
+      await this.emailService.sendEmail(
         user.corporateEmail,
         'Lo sentimos, pero tenemos una oportunidad más.',
         htmlContent
@@ -180,7 +179,7 @@ export class UserLogic {
     const htmlContent = getRecoverPasswordEmailTemplate(name, id, this.frontendBaseUrl);
 
     try {
-      await this.mailerService.sendMail(
+      await this.emailService.sendEmail(
         corporateEmail,
         'Cambio de Contraseña',
         htmlContent
@@ -218,7 +217,7 @@ export class UserLogic {
     const htmlContent = getSendPasswordConfirmationEmail(user);
 
     try {
-      await this.mailerService.sendMail(
+      await this.emailService.sendEmail(
         user.corporateEmail,
         'Cambio de Contraseña Exitoso',
         htmlContent

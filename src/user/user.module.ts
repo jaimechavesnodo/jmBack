@@ -7,7 +7,7 @@ import { UserLogic } from './user.logic';
 import { UserController } from './user.controller';
 import { User } from './entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
-import { MailerService } from './herlpers/mail.services';
+import { EmailService } from './herlpers/email.services';
 
 @Module({
   imports: [
@@ -20,7 +20,7 @@ import { MailerService } from './herlpers/mail.services';
       envFilePath: '.env',
     }),
   ],
-  providers: [UserService, UserLogic, JwtService, MailerService],
+  providers: [UserService, UserLogic, JwtService, EmailService],
   controllers: [UserController],
 })
 export class UserModule {}

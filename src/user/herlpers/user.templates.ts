@@ -1,9 +1,8 @@
 import { User } from 'user/entities/user.entity';
 
 
-export const getApproveEmailTemplate = (newUser: User, baseUrl: string) => {
-    const approveLink = `${baseUrl}/User/approveEmail/${encodeURIComponent(newUser.id)}`;
-    const rejectLink = `${baseUrl}/User/declineUser/${encodeURIComponent(newUser.id)}`;
+export const getApproveEmailTemplate = (newUser: User) => {
+
 
     return `
         <p>¡Hola!</p>
@@ -32,7 +31,7 @@ export const getApproveEmailTemplate = (newUser: User, baseUrl: string) => {
 export const getSendRegistrationUser = () => {
     return `
         <p>¡Hola!</p>
-        <p>Desde ahora puedes ingresar a nuestro portal https://jmfront.azurewebsites.net.
+        <p>Desde ahora puedes ingresar a nuestro portal https://jmfront.azurewebsites.net .
         Recuerda guardar usuario y contraseña para acceder a todos los beneficios del
         plan de Privilegios.</p>
         <br>
