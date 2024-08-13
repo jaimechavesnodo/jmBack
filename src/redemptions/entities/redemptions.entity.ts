@@ -17,5 +17,8 @@ export class CustomerRedemptions {
   @Column()
   idUser: number;
 
+  @Column()
+  redeemedAmount: number;
+
 }
 

@@ -31,18 +31,21 @@ export const getApproveEmailTemplate = (newUser: User) => {
 export const getSendRegistrationUser = () => {
     return `
         <p>¡Hola!</p>
-        <p>Desde ahora puedes ingresar a nuestro portal https://jmfront.azurewebsites.net .
+        <p>Desde ahora puedes ingresar a nuestro portal https://jmfront.azurewebsites.net.
         Recuerda guardar usuario y contraseña para acceder a todos los beneficios del
         plan de Privilegios.</p>
         <br>
         <div style="text-align: center;">
-            <img src="https://drive.google.com/file/d/1UQwehCe6SzbWqcJNcyjRKSSyZby1rd3Q/view?usp=sharing" alt="Imagen de cabecera" style="max-width: 100%; height: auto;">
+            <img src="https://ocrnodo.blob.core.windows.net/ocr/activacionCuenta.jpeg" 
+            alt="prueba" style="max-width: 100%; height: 70;">
         </div>
         <br>
         <p>Equipo Soporte</p>
         <p>JMalucelli Travelers Seguros.</p>
     `;
 };
+
+
 
 export const getApprovalConfirmationEmailTemplate = (user: User) => {
     return `
@@ -54,7 +57,6 @@ export const getApprovalConfirmationEmailTemplate = (user: User) => {
         <p>JMalucelli Travelers Seguros.</p>
     `;
 };
-
 
 export const getRecoverPasswordEmailTemplate = (name: string, id: number, frontendBaseUrl: string) => {
     const resetPasswordLink = `${frontendBaseUrl}/crear-contrasena/${encodeURIComponent(id)}`;
@@ -88,7 +90,8 @@ export const getSendPasswordConfirmationEmail = (user: User) => {
         <p>JMalucelli Travelers Seguros informa que se ha realizado exitosamente el cambio de la contraseña.</p>
         <br>
         <div style="text-align: center;">
-            <img src="https://drive.google.com/file/d/1yA9VRueg-61xReycBIB_yhn42CDuaW0n/view?usp=sharing" alt="Imagen de cabecera" style="max-width: 100%; height: auto;">
+            <img src="https://ocrnodo.blob.core.windows.net/ocr/cambioContraseña.jpeg" 
+            alt="Cambio de Contraseña" style="max-width: 100%; height: 70;">
         </div>
         <br>
         <p>Equipo Soporte</p>

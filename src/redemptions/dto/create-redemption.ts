@@ -12,4 +12,7 @@ export class CreateRedemptionDto {
 
     @IsInt()
     idUser: number;
+
+    @IsInt()
+    redeemedAmount: number;
 }

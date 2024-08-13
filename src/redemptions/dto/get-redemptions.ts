@@ -1,4 +1,5 @@
 import { IsInt, IsNumber, IsString } from "class-validator";
+import { In } from "typeorm";
 
 export class GetRedemptionDto {
     @IsInt()
@@ -15,4 +16,7 @@ export class GetRedemptionDto {
 
     @IsInt()
     idUser: number;
+
+    @IsInt()
+    redeemedAmount: number;
 }

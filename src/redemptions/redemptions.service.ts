@@ -15,30 +15,37 @@ export class RedemptionsService {
     ) {}
 
     async findAll(params: RedemptionsCustomerDto, idUser: number): Promise<GetRedemptionDto[]> {
-        const { orderName, redemptionDate, page, limit } = params;
-        const skip = page * limit;
-        
-        let qb = this.redemptionRepository.createQueryBuilder('redemption');
-        if (orderName) {
-            qb = qb.andWhere('redemption.orderName = :orderName', { orderName });
-        }
-        if (redemptionDate) {
-            qb = qb.andWhere('redemption.redemptionDate = :redemptionDate', { redemptionDate });
-        }
-        
-        qb = qb.andWhere('redemption.idUser = :idUser', { idUser });
+    const { orderName = '', redemptionDate, page, limit } = params;
+    const skip = page * limit;
     
-        qb = qb.skip(skip).take(limit);
-        const redemptions = await qb.getMany();
+    let qb = this.redemptionRepository.createQueryBuilder('redemption');
 
-        return redemptions.map(redemption => ({
-            id: redemption.id,
-            orderName: redemption.orderName,
-            redemptionDate: redemption.redemptionDate.toISOString().split('T')[0],
-            pointsProduct: redemption.pointsProduct,
-            idUser: redemption.idUser,
-        }));
+    if (orderName) {
+        qb = qb.andWhere('redemption.orderName LIKE :orderName', { orderName: `%${orderName}%` });
     }
+
+    if (redemptionDate) {
+        qb = qb.andWhere('redemption.redemptionDate = :redemptionDate', { redemptionDate });
+    }
+
+    qb = qb.andWhere('redemption.idUser = :idUser', { idUser });
+
+    qb = qb.orderBy('redemption.id', 'DESC');
+
+    qb = qb.skip(skip).take(limit);
+    
+    const redemptions = await qb.getMany();
+
+    return redemptions.map(redemption => ({
+        id: redemption.id,
+        orderName: redemption.orderName,
+        redemptionDate: redemption.redemptionDate.toISOString().split('T')[0],
+        pointsProduct: redemption.pointsProduct,
+        idUser: redemption.idUser,
+        redeemedAmount: redemption.redeemedAmount
+    }));
+}
+
     
 
     async create(createRedemptionDto: CreateRedemptionDto): Promise<CustomerRedemptions> {
