@@ -31,8 +31,8 @@ export const getApproveEmailTemplate = (newUser: User) => {
 export const getSendRegistrationUser = () => {
     return `
         <p>¡Hola!</p>
-        <p>Desde ahora puedes ingresar a nuestro portal https://jmfront.azurewebsites.net.
-        Recuerda guardar usuario y contraseña para acceder a todos los beneficios del
+        <p>Desde ahora puedes ingresar a nuestro portal https://www.privilegiosjmtrv.com.co .
+        Recuerda guardar usuario (tú número de documento) y contraseña para acceder a todos los beneficios del
         plan de Privilegios.</p>
         <br>
         <div style="text-align: center;">
@@ -50,7 +50,7 @@ export const getSendRegistrationUser = () => {
 export const getApprovalConfirmationEmailTemplate = (user: User) => {
     return `
         <p>¡Hola ${user.name}!</p>
-        <p>Desde ahora puedes ingresar a nuestro portal https://jmfront.azurewebsites.net/ . 
+        <p>Desde ahora puedes ingresar a nuestro portal https://www.privilegiosjmtrv.com.co . 
         Recuerda guardar usuario y contraseña para acceder a todos los beneficios del plan de Privilegios.</p>
         <br>
         <p>Equipo Soporte</p>

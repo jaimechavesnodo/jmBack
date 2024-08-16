@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CommonModule } from './common/common.module';
@@ -9,7 +9,7 @@ import { CatalogueModule } from 'catalogue/catalogue.module';
 import { ProductModule } from 'product/product.module';
 import { ShoppingModule } from 'shopping-cart/shopping.module';
 import { SubcategoriesCatalogoModule } from 'SubCategories/subcategories.module';
-
+import { CorsMiddleware } from '@nest-middlewares/cors';
 
 
 @Module({
@@ -39,7 +39,13 @@ import { SubcategoriesCatalogoModule } from 'SubCategories/subcategories.module'
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(CorsMiddleware)
+      .forRoutes('*');
+  }
+}
 
 
 
