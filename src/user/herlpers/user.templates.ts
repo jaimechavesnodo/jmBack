@@ -28,17 +28,20 @@ export const getApproveEmailTemplate = (newUser: User) => {
 };
 
 
-export const getSendRegistrationUser = () => {
+export const getSendRegistrationUser = (user: User) => {
     return `
-        <p>¡Hola!</p>
+        <p>¡Hola ${user.name}!</p>
         <p>Desde ahora puedes ingresar a nuestro portal https://www.privilegiosjmtrv.com.co .
         Recuerda guardar usuario (tú número de documento) y contraseña para acceder a todos los beneficios del
         plan de Privilegios.</p>
         <br>
         <div style="text-align: center;">
             <img src="https://ocrnodo.blob.core.windows.net/ocr/activacionCuenta.jpeg" 
-            alt="prueba" style="max-width: 100%; height: 70;">
+            alt="userOn" style="max-width: 100%; height: 70;">
         </div>
+        <br>
+        <p>Si tienes algún problema activando tu cuenta por favor envíanos un correo a comunicaciones@jmtrv.com.co, 
+        con un pantallazo y una pequeña descripción del error, para poder ayudarte.</p>
         <br>
         <p>Equipo Soporte</p>
         <p>JMalucelli Travelers Seguros.</p>
@@ -50,7 +53,7 @@ export const getSendRegistrationUser = () => {
 export const getApprovalConfirmationEmailTemplate = (user: User) => {
     return `
         <p>¡Hola ${user.name}!</p>
-        <p>Desde ahora puedes ingresar a nuestro portal https://www.privilegiosjmtrv.com.co . 
+        <p>Desde ahora puedes ingresar a nuestro portal. 
         Recuerda guardar usuario y contraseña para acceder a todos los beneficios del plan de Privilegios.</p>
         <br>
         <p>Equipo Soporte</p>
@@ -77,6 +80,10 @@ export const getRecoverPasswordEmailTemplate = (name: string, id: number, fronte
                 margin-right: 10px;
             ">Cambiar Contraseña</a>
         </div>
+        <br>
+        <p>Si tienes algún problema cambiando tu contraseña por favor envíanos un correo a comunicaciones@jmtrv.com.co, 
+        con un pantallazo y una pequeña descripción del error, para poder ayudarte.</p>
+        <br>
         <p>Equipo Soporte</p>
         <p>JMalucelli Travelers Seguros.</p>
 

@@ -73,11 +73,12 @@ export class UserLogic {
     await this.sendApproveEmail(newUser, approveEmailRecipients);
 
     if (newUser.corporateEmail) {
-      await this.sendRegistrationEmail(newUser.corporateEmail);
+      await this.sendRegistrationEmail(newUser.corporateEmail, newUser);
     }
 
     return newUser;
   }
+  
 
   private async sendApproveEmail(newUser: User, recipients: string[]) {
     const htmlContent = getApproveEmailTemplate(newUser);
@@ -94,12 +95,12 @@ export class UserLogic {
     }
   }
 
-  private async sendRegistrationEmail(corporateEmail: string) {
-    const textContent = getSendRegistrationUser();
+  private async sendRegistrationEmail(corporateEmail: string, user: User) {
+    const textContent = getSendRegistrationUser(user);
 
     try {
       await this.emailService.sendEmail(
-        corporateEmail,
+        user.corporateEmail,
         'Bienvenido, ya eres parte del Plan Privilegios.',
         textContent
       );
@@ -108,6 +109,7 @@ export class UserLogic {
       console.error('Error al enviar el correo electrónico de confirmación:', error);
     }
   }
+
 
   async approveUser(id: number): Promise<void> {
     const user = await this.usersService.findOneById(id);
