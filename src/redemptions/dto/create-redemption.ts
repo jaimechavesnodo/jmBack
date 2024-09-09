@@ -15,4 +15,7 @@ export class CreateRedemptionDto {
 
     @IsInt()
     redeemedAmount: number;
+
+    // @IsNumber()
+    // previousPointHistory: number;
 }

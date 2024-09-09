@@ -19,6 +19,8 @@ export class CustomerRedemptions {
 
   @Column()
   redeemedAmount: number;
-
+  
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  previousPointHistory: number;
 }
 

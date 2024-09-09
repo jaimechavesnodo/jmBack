@@ -46,8 +46,6 @@ export class RedemptionsService {
     }));
 }
 
-    
-
     async create(createRedemptionDto: CreateRedemptionDto): Promise<CustomerRedemptions> {
         const redemption = this.redemptionRepository.create(createRedemptionDto);
         return this.redemptionRepository.save(redemption);
